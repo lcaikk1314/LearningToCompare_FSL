@@ -207,7 +207,7 @@ def main():
 
 
         if (episode+1)%100 == 0:
-                print("episode:",episode+1,"loss",loss.data[0])
+                print("episode:",episode+1,"loss",loss.item())#print("episode:",episode+1,"loss",loss.data[0])
 
         if episode%5000 == 0:
 
@@ -224,6 +224,7 @@ def main():
                 test_dataloader = tg.get_mini_imagenet_data_loader(task,num_per_class=num_per_class,split="test",shuffle=True)
                 sample_images,sample_labels = sample_dataloader.__iter__().next()
                 for test_images,test_labels in test_dataloader:
+                    test_labels=test_labels.cuda()
                     batch_size = test_labels.shape[0]
                     # calculate features
                     sample_features = feature_encoder(Variable(sample_images).cuda(GPU)) # 5x64
