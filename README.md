@@ -1,3 +1,8 @@
+下一步任务：
+训练样本替换成细粒度样本，更易于学习到类间差别；
+推理的时候任意nway1shot就行；
+
+
 # LearningToCompare_FSL
 PyTorch code for CVPR 2018 paper: [Learning to Compare: Relation Network for Few-Shot Learning](https://arxiv.org/abs/1711.06025) (Few-Shot Learning part)
 
