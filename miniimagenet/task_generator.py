@@ -52,8 +52,8 @@ class MiniImagenetTask(object):
         self.train_num = train_num
         self.test_num = test_num
 
-        class_folders = random.sample(self.character_folders,self.num_classes)
-        labels = np.array(range(len(class_folders)))
+        class_folders = random.sample(self.character_folders,self.num_classes)#从指定序列中随机获取指定长度的片断返回
+        labels = np.array(range(len(class_folders)))#生成类别 0，1，2，3，4
         labels = dict(zip(class_folders, labels))
         samples = dict()
 
@@ -91,7 +91,7 @@ class FewShotDataset(Dataset):
     def __getitem__(self, idx):
         raise NotImplementedError("This is an abstract class. Subclass this class for your particular dataset.")
 
-class MiniImagenet(FewShotDataset):
+class MiniImagenet(FewShotDataset):#用类的继承
 
     def __init__(self, *args, **kwargs):
         super(MiniImagenet, self).__init__(*args, **kwargs)
@@ -120,15 +120,15 @@ class ClassBalancedSampler(Sampler):
 
     def __iter__(self):
         # return a single list of indices, assuming that items will be grouped by class
-        if self.shuffle:
+        if self.shuffle:###下面几行仔细看，尤其是中括号
             batch = [[i+j*self.num_inst for i in torch.randperm(self.num_inst)[:self.num_per_class]] for j in range(self.num_cl)]
         else:
             batch = [[i+j*self.num_inst for i in range(self.num_inst)[:self.num_per_class]] for j in range(self.num_cl)]
-        batch = [item for sublist in batch for item in sublist]
+        batch = [item for sublist in batch for item in sublist]#这一行没什么什么作用，相当于batch=batch？目的为何 ？
 
         if self.shuffle:
             random.shuffle(batch)
-        return iter(batch)
+        return iter(batch)#也就是实现了__iter__()方法或者__getitem__()方法
 
     def __len__(self):
         return 1
@@ -140,7 +140,7 @@ def get_mini_imagenet_data_loader(task, num_per_class=1, split='train',shuffle =
     dataset = MiniImagenet(task,split=split,transform=transforms.Compose([transforms.ToTensor(),normalize]))
 
     if split == 'train':
-        sampler = ClassBalancedSampler(num_per_class, task.num_classes, task.train_num,shuffle=shuffle)
+        sampler = ClassBalancedSampler(num_per_class, task.num_classes, task.train_num,shuffle=shuffle)#sampler自定义从数据集中取样本的策略
     else:
         sampler = ClassBalancedSampler(num_per_class, task.num_classes, task.test_num,shuffle=shuffle)
 
