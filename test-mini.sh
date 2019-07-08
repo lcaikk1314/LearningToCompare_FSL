@@ -1,0 +1,1 @@
+cd miniimagenet && python3 miniimagenet_test_one_shot.py -w 5 -s 1
