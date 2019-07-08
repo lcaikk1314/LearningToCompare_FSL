@@ -189,7 +189,7 @@ def main():
         relation_pairs = torch.cat((sample_features_ext,batch_features_ext),2).view(-1,FEATURE_DIM*2,19,19)
         relations = relation_network(relation_pairs).view(-1,CLASS_NUM*SAMPLE_NUM_PER_CLASS)
 
-        mse = nn.MSELoss().cuda(GPU)
+        mse = nn.MSELoss().cuda(GPU)##scatter_解析https://www.cnblogs.com/shiyublog/p/10924287.html
         one_hot_labels = Variable(torch.zeros(BATCH_NUM_PER_CLASS*CLASS_NUM, CLASS_NUM).scatter_(1, batch_labels.view(-1,1), 1)).cuda(GPU)
         loss = mse(relations,one_hot_labels)
 
